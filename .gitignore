@@ -1,32 +1,144 @@
-# Prerequisites
-*.d
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+long convert_to_base10(vector<int> a, int base);
+vector<int> base10_to_newbase(long a, int base);
 
-# Precompiled Headers
-*.gch
-*.pch
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+long convert_to_base10(vector<int> a, int base)
+{
+    int size = a.size();
+    //int power = 0;
+    int quotient;
+    long sum = 0;
+    int pow_num = 0;
+    int remain;
+    int duplicate;
+    for(int i = size; i > 0; i-- )
+    {
+        if(a[i-1] > base)
+        {
+            //duplicate = a[i];
+            quotient = a[i-1];
+            while(quotient!=0)
+            {
+                //pow_num = pow_num+1;
+                remain = (quotient%10);
+                sum = sum + (remain * pow(base,pow_num));
+                pow_num = pow_num+1;
+                quotient = quotient/10;
+                //pow_num = pow_num+1;
+            }
+        }
+        else
+        {
+            sum = sum + (a[i-1] * pow(base,pow_num));
+            //pow_num = pow_num+1;
+        }
+        pow_num = pow_num+1;
+    }
+    
+    return sum;
+}
 
-# Fortran module files
-*.mod
-*.smod
+vector<int> base10_to_newbase(long a, int base)
+{
+    vector<int> d;
+    long quotient = a;
+    int g;
+    while(quotient!=0)
+    {
+        g = quotient%base;
+        d.push_back(g);
+        quotient = quotient/base;
+    }
+    return d;
+    //for(int i = 0; i<d.size(); i++)
+    //{
+    //    cout<<d[i]<<'-';
+    //}
+}
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+int main()
+{
+    vector<int> num1;
+    vector<int> num2;
+    int size;
+    int base1;
+    int base2;
+    cin>>size;
+    long baseTen;
+    for(int i = 0; i < size; i++)
+    {
+        int element;
+        cin>>element;
+        num1.push_back(element);
+    }
+    //cout<<endl;
+    for(int i = 0; i < size; i++)
+    {
+        if(i>0)
+        {
+            int k = -1;
+            num1[i] = k*num1[i];
+        }
+    }
+    //for(int i = 0; i < size; i++)
+    //{
+    //    cout<<num1[i]<<endl;
+    //}
+    cin>>base1;
+    cin>>base2;
+    //bool flag = true;
+    for(int i = 0; i < size; i++)
+    {
+        if((num1[i] < 100)&&(num1[i] > base1))
+        {
+            for(int j = 0; j < size; j++)
+            {
+                if(j+1 < size)
+                {
+                    cout<<num1[j]<<'-';
+                }
+                else
+                {
+                    cout<<num1[j];
+                }
+            }
+            
+            cout<<" is invalid, since one single bit -"<<num1[i]<<"- is bigger than base "<<base1<<endl;
+            return -1;
+        }
+    }
+    
+    baseTen = convert_to_base10(num1, base1);
+    cout<<baseTen<<endl;
+    
+    num2 = base10_to_newbase(baseTen, base2);
+    /*for(int i = 0; i<num2.size(); i++)
+    {
+        if((i+1) < num2.size())
+        {
+            cout<<num2[i]<<'-';
+        }
+        else
+        {
+            cout<<num2[i];
+        }
+    }*/
+    for(int i = num2.size()-1; i>-1; i--)
+    {
+        if((i-1) > -1)
+        {
+            cout<<num2[i]<<'-';
+        }
+        else
+        {
+            cout<<num2[i];
+        }
+    }
+    cout<<endl;
+    return 0;
+}
